@@ -11,6 +11,14 @@ services:
         value: 4
       - key: DJANGO_ENV
         value: production
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: echo-bmt4.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://echo-bmt4.onrender.com
+      - key: SECRET_KEY
+        generateValue: true
       - key: REDIS_URL
         fromService:
           type: redis
