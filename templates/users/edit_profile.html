@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="min-h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center py-8">
+    <div class="max-w-lg w-full mx-4 bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-6">Edit Profile</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="space-y-6">
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Bio</label>
+            {{ form.bio }}
+          </div>
+        </div>
+        <div class="mt-8 text-right">
+          <button type="submit" class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

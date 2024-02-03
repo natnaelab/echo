@@ -1,0 +1,28 @@
+<div class="flex {% if message.user == user %}justify-end{% else %}justify-start{% endif %} gap-3">
+    {% if message.user != user %}
+        <div class="flex-shrink-0">
+            <img 
+                class="w-9 h-9 rounded-lg shadow-sm"
+                src="https://api.dicebear.com/7.x/thumbs/svg?seed={{ message.user.username }}&backgroundColor=4F46E5"
+                alt="{{ message.user.username }}"
+            >
+        </div>
+    {% endif %}
+
+    <div class="flex flex-col {% if message.user == user %}items-end{% else %}items-start{% endif %} max-w-[75%] group">
+        <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-medium {% if message.user == user %}text-indigo-500{% else %}text-gray-700{% endif %}">
+                {% if message.user == user %}You{% else %}{{ message.user.username }}{% endif %}
+            </span>
+        </div>
+
+        <div>
+            <div class="{% if message.user == user %}bg-indigo-500 text-white{% else %}bg-gray-100 text-gray-800{% endif %} rounded-lg px-4 py-2 shadow-sm">
+                <p class="text-sm whitespace-pre-wrap">{{ message.message }}</p>
+            </div>
+            <span class="text-xs text-gray-400 mt-1">
+                {{ message.timestamp|date:"g:i A" }}
+            </span>
+        </div>
+    </div>
+</div>

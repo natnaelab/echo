@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-[calc(100vh-4rem)] bg-gray-50 flex items-center justify-center">
+    <div class="max-w-md w-full mx-4">
+        <div class="bg-white rounded-lg shadow-sm border p-6 text-center">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-4">Welcome to Echo</h1>
+            {% if user.is_authenticated %}
+                <p class="text-gray-600 mb-6">Start chatting by joining a room or creating your own.</p>
+                <div class="space-y-3">
+                    <a href="{% url 'rooms' %}" 
+                        class="block w-full p-2.5 text-sm text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 transition-colors">
+                        Browse Chat Rooms
+                    </a>
+                    <a href="{% url 'chat_room' room_name='public' %}" 
+                        class="block w-full p-2.5 text-sm text-gray-900 bg-white rounded-lg border hover:bg-gray-50 transition-colors">
+                        Join Public Chat
+                    </a>
+                </div>
+            {% else %}
+                <p class="text-gray-600 mb-6">Please log in or create an account to start chatting.</p>
+                <div class="space-y-3">
+                    <a href="{% url 'account_login' %}" 
+                        class="block w-full p-2.5 text-sm text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 transition-colors">
+                        Login
+                    </a>
+                    <a href="{% url 'account_signup' %}" 
+                        class="block w-full p-2.5 text-sm text-gray-900 bg-white rounded-lg border hover:bg-gray-50 transition-colors">
+                        Create Account
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

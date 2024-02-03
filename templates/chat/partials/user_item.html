@@ -1,0 +1,9 @@
+<img 
+    class="w-8 h-8 rounded-full shadow-sm"
+    src="https://api.dicebear.com/7.x/thumbs/svg?seed={{ user.username }}&backgroundColor=4F46E5"
+    alt="{{ user.username }}'s avatar"
+>
+<div class="flex items-center gap-2">
+    <a href="{% url 'profile' username=user.username %}" class="text-gray-900 font-medium hover:text-indigo-600 transition-colors">{{ user.username }}</a>
+    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+</div>

@@ -1,0 +1,9 @@
+<div class="space-y-2" id="online-users" hx-swap-oob='outerHTML'>
+    {% for user in users %}
+    <a href="{% url 'profile' username=user.username %}" class="block">
+        <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors my-1">
+            {% include "chat/partials/user_item.html" %}
+        </div>
+    </a>
+    {% endfor %}
+</div>

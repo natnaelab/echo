@@ -1,0 +1,58 @@
+{% if messages %}
+<div class="fixed top-20 left-1/2 -translate-x-1/2 w-full max-w-lg px-4 z-50" id="messages">
+    {% for message in messages %}
+    <div class="p-4 rounded-lg mb-3 flex items-center justify-between shadow-lg animate-[fadeIn_0.3s_ease-in] {% if message.tags == 'success' %}bg-green-50 text-green-700 border border-green-200{% elif message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200{% else %}bg-white text-gray-700 border border-gray-200{% endif %}" data-message>
+        <span class="flex items-center gap-2">
+            {% if message.tags == 'success' %}
+            <i data-feather="check-circle" class="w-5 h-5"></i>
+            {% elif message.tags == 'error' %}
+            <i data-feather="alert-circle" class="w-5 h-5"></i>
+            {% else %}
+            <i data-feather="info" class="w-5 h-5"></i>
+            {% endif %}
+            {{ message }}
+        </span>
+        <button class="p-1 hover:bg-black/5 rounded dismiss-message">
+            <i data-feather="x" class="w-4 h-4"></i>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.querySelectorAll('.dismiss-message').forEach(button => {
+        button.addEventListener('click', () => {
+            const messageDiv = button.closest('[data-message]');
+            messageDiv.classList.add('animate-[fadeOut_0.3s_ease-in]');
+            setTimeout(() => {
+                messageDiv.remove();
+                if (document.querySelectorAll('#messages > div').length === 0) {
+                    document.getElementById('messages').remove();
+                }
+            }, 300);
+        });
+    });
+
+    setTimeout(() => {
+        const messages = document.getElementById('messages');
+        if (messages) {
+            const children = Array.from(messages.querySelectorAll('[data-message]'));
+            children.forEach((child, index) => {
+                setTimeout(() => {
+                    child.classList.add('animate-[fadeOut_0.3s_ease-in]');
+                    setTimeout(() => {
+                        child.remove();
+                        if (document.querySelectorAll('#messages > div').length === 0) {
+                            messages.remove();
+                        }
+                    }, 300);
+                }, index * 200);
+            });
+        }
+    }, 5000);
+
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+</script>
+{% endif %}

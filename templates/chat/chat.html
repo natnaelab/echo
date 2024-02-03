@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static %}
+
+{% block content %}
+<div class="fixed inset-x-0 bottom-0 top-[4rem] overflow-hidden bg-gray-50 z-0">
+    <div class="flex justify-center h-full">
+        <div class="flex flex-col h-full w-full max-w-3xl bg-white shadow-sm mx-4">
+            <!-- Header -->
+            <div class="border-b p-4 flex items-center justify-between bg-white shadow-sm">
+                <div class="flex items-center gap-3">
+                    <img 
+                        class="w-10 h-10 rounded-lg shadow-sm"
+                        src="https://api.dicebear.com/7.x/thumbs/svg?seed={{ room.room_name }}&backgroundColor=4F46E5"
+                        alt="{{ room.room_name }}"
+                    >
+                    <div>
+                        <h1 class="text-lg font-semibold text-gray-900">{{ room.room_name|capfirst }}</h1>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <div id="online-count">{{ room.online_users.count }} online</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="{% url 'rooms' %}" class="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i data-feather="home" class="w-5 h-5 text-gray-500"></i>
+                        <span class="text-sm text-gray-700">Rooms</span>
+                    </a>
+                    <button class="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg transition-colors" id="show-members">
+                        <i data-feather="users" class="w-5 h-5 text-gray-500"></i>
+                        <span class="text-sm text-gray-700">Online Users</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="flex flex-1 overflow-hidden">
+                <div class="flex-1 overflow-y-auto p-4 space-y-4" id="messages-container">
+                    <div id="chat-messages">
+                        {% now "Y-m-d" as today %}
+                        {% if chat_messages %}
+                            {% regroup chat_messages by timestamp|date:"Y-m-d" as message_groups %}
+                            {% for group in message_groups %}
+                                <div class="flex items-center justify-center my-4">
+                                    <div class="bg-gray-100 rounded-full px-4 py-1.5 shadow-sm">
+                                        <span class="text-sm text-gray-600">
+                                            {% if group.grouper == today %}
+                                                Today
+                                            {% else %}
+                                                {{ group.grouper }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                                {% for message in group.list %}
+                                    {% include "chat/partials/message_item.html" %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="online-users-sidebar" class="hidden w-64 border-l bg-white overflow-y-auto">
+                    <div class="p-4 border-b bg-gray-50">
+                        <h3 class="text-lg font-medium text-gray-900">Online Users</h3>
+                        <p class="text-sm text-gray-500" id="online-count">{{ room.online_users.count }} online</p>
+                    </div>
+                    <div class="space-y-2" id="online-users">
+                        {% for user in room.online_users.all %}
+                        <div class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors my-1">
+                            {% include "chat/partials/user_item.html" %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <form class="border-t p-4 bg-white shadow-sm flex items-center gap-2" id="message-form"
+                    hx-ext='ws'
+                    ws-connect='/ws/chatroom/{{ room.room_name }}/'
+                    ws-send>
+                {% csrf_token %}
+                <div class="flex-1 relative">
+                    {{ message_form.message }}
+                </div>
+                <button type="submit" class="inline-flex items-center justify-center p-2.5 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0">
+                    <i data-feather="send" class="w-5 h-5 text-gray-600"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
