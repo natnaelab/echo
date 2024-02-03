@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: echo
+    env: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: daphne -b 0.0.0.0 -p $PORT core.asgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DJANGO_ENV
+        value: production
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: echo-redis
+          property: connectionString
+
+  - type: redis
+    name: echo-redis
+    ipAllowList: []
+    plan: free
