@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-RUN python manage.py collectstatic --noinput
+RUN pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
 
 EXPOSE 8000
 
